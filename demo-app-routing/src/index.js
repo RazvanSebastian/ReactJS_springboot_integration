@@ -10,6 +10,7 @@ const Users = lazy(() => import('./users'))
 const Contact = lazy(() => import('./contact'))
 const Table = lazy(() => import('./fragments'))
 const ContextDemo = lazy(() => import('./context'));
+const TestErrorBoundary = lazy(() => import('./error-boundaries'));
 
 const routing = (
     <Router>
@@ -30,6 +31,9 @@ const routing = (
                 <li>
                     <NavLink activeClassName="active" to="/context">Context</NavLink >
                 </li>
+                <li>
+                    <NavLink activeClassName="active" to="/error-boundary">Error-Boundary</NavLink >
+                </li>
             </ul>
             <Suspense fallback={<div>Loading...</div>}>
                 <Switch>
@@ -38,6 +42,7 @@ const routing = (
                     <Route path="/contact" component={Contact} />
                     <Route path="/fragments" component={Table} />
                     <Route path="/context" component={ContextDemo} />
+                    <Route path="/error-boundary" component={TestErrorBoundary}/>
                     <Route component={Notfound} />
                 </Switch>
             </Suspense>
