@@ -9,24 +9,65 @@ class User extends React.Component {
     }
 }
 
+function UserRows(props) {
+    return (
+        props.users.map((user, id) => {
+            const path = "/users/" + id;
+            return (
+                <li key={id}>
+                    <Link to={path} > Name : {user.name} and age : {user.age} </Link>
+                </li >
+            )
+        })
+    )
+}
+
 class Users extends React.Component {
-    render() {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoading: true,
+            isSuccessfully: true,
+            users: []
+        }
+    }
+
+    componentDidMount() {
+        fetch('/users')
+            .then(response => response.json())
+            .then(response =>
+                this.setState({
+                    users: response,
+                    isLoading: false,
+                    isSuccessfully: true
+                }))
+            .catch(err => this.setState({
+                isLoading: false,
+                isSuccessfully: false
+            }))
+    }
+
+    onSuccess() {
         return (
             <div>
                 <h1>Users</h1>
                 <strong>Nested router of users</strong>
                 <ul>
-                    <li>
-                        <Link to="/users/1">User 1 </Link>
-                    </li>
-                    <li>
-                        <Link to="/users/2">User 2 </Link>
-                    </li>
-                    <li>
-                        <Link to="/users/3">User 3 </Link>
-                    </li>
+                    <UserRows users={this.state.users} />
                 </ul>
                 <Route path="/users/:id" component={User} />
+            </div>
+        )
+    }
+
+    render() {
+        return (
+            <div>
+                {
+                    this.state.isLoading ?
+                        <h3>Loading...</h3> :
+                        this.onSuccess()
+                }
             </div>
         )
     }
